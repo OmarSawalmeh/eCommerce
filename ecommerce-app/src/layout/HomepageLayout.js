@@ -5,9 +5,9 @@ import Footer from '../components/Footer'
 function HomepageLayout(props) {
   return (
     <div className='fullheight'>
-      <Header />
+      <Header {...props}/>
          {props.children}
-         <Footer />
+      <Footer />
     </div>
   )
 }
