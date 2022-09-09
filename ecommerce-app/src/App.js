@@ -14,38 +14,28 @@ import Login from './pages/Login'
 // style
 import './default.scss'
 
-const initialState = {
-  currentUser: null
-}
+// action / redux
+import { connect } from 'react-redux'
+import { setCurrentUser } from './redux/User/user.actions'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      ...initialState,
-    }
-  }
   authListener = null
-  
 
   // similler the useEffect (execute every render)
   componentDidMount() {
-    this.authListener = auth.onAuthStateChanged(async userAuth => {
-      if(userAuth){
-        const userRef = await handleUserProfile(userAuth);
-        userRef.onSnapshot(snapshot=>{
-          this.setState({
-            currentUser:{
-              id: snapshot.id,
-              ...snapshot.data()
-            }
+    const {setCurrentUser} = this.props;
+    this.authListener = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await handleUserProfile(userAuth)
+        userRef.onSnapshot((snapshot) => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data(),
           })
         })
       }
 
-      this.setState({
-        ...initialState
-      })
+      setCurrentUser(userAuth);
     })
   }
 
@@ -54,8 +44,7 @@ class App extends React.Component {
   }
 
   render() {
-
-    const {currentUser} = this.state
+    const { currentUser } = this.props
 
     return (
       <div className='App'>
@@ -64,7 +53,7 @@ class App extends React.Component {
             exact
             path='/'
             element={
-              <HomepageLayout currentUser={currentUser}>
+              <HomepageLayout>
                 <Homepage />
               </HomepageLayout>
             }
@@ -72,7 +61,7 @@ class App extends React.Component {
           <Route
             path='/registration'
             element={
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Registration />
               </MainLayout>
             }
@@ -80,16 +69,21 @@ class App extends React.Component {
           <Route
             path='/login'
             element={
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Login />
               </MainLayout>
             }
           />
-  
         </Routes>
       </div>
     )
   }
 }
 
-export default App
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+})
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(App)
