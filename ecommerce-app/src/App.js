@@ -1,6 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { auth, handleUserProfile } from './firebase/utils'
+
+// hoc
+import WithAuth from './hoc/withAuth'
 
 // layouts
 import MainLayout from './layout/MainLayout'
@@ -10,6 +13,7 @@ import HomepageLayout from './layout/HomepageLayout'
 import Homepage from './pages/Homepage'
 import Registration from './pages/Registration'
 import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
 
 // style
 import './default.scss'
@@ -18,13 +22,11 @@ import './default.scss'
 import { connect } from 'react-redux'
 import { setCurrentUser } from './redux/User/user.actions'
 
-class App extends React.Component {
-  authListener = null
+const App = props => {
+  const { setCurrentUser, currentUser } = props
 
-  // similler the useEffect (execute every render)
-  componentDidMount() {
-    const {setCurrentUser} = this.props;
-    this.authListener = auth.onAuthStateChanged(async (userAuth) => {
+  useEffect(()=>{
+      const authListener = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth)
         userRef.onSnapshot((snapshot) => {
@@ -37,14 +39,11 @@ class App extends React.Component {
 
       setCurrentUser(userAuth);
     })
-  }
 
-  componentWillUnmount() {
-    this.authListener()
-  }
-
-  render() {
-    const { currentUser } = this.props
+    return()=>{
+      authListener();
+    }
+  }, [])
 
     return (
       <div className='App'>
@@ -74,11 +73,20 @@ class App extends React.Component {
               </MainLayout>
             }
           />
+          <Route
+            path='/dashboard'
+            element={
+              <WithAuth>
+                <MainLayout>
+                  <Dashboard />
+                </MainLayout>
+              </WithAuth>
+            }
+          />
         </Routes>
       </div>
     )
   }
-}
 
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser,
