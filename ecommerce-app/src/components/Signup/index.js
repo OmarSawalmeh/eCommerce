@@ -1,16 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import { signupUser, resetAllAuthForms } from './../../redux/User/user.actions'
+import { useNavigate } from 'react-router'
 import './style.scss'
 
-import { auth, handleUserProfile } from './../../firebase/utils'
 import FormInput from '../Forms/FormInput'
 import Button from '../Forms/Button'
 
+const mapState = ({user})=>({
+  signupSuccess: user.signupSuccess,
+  signupError: user.signupError
+})
+
 const Signup = (props) => {
+  const {signupSuccess, signupError} = useSelector(mapState)
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState([])
+
+  useEffect(()=>{
+    if(signupSuccess){
+      resetState();
+      dispatch(resetAllAuthForms())
+      history('/')
+    }
+  }, [signupSuccess])
+
+  useEffect(()=>{
+    if(Array.isArray(signupError) && signupError.length>0){
+      setErrors(signupError);
+    }
+  }, [signupError])
 
   const resetState = () => {
     setDisplayName('')
@@ -20,35 +45,15 @@ const Signup = (props) => {
     setErrors([])
   }
 
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = (event) => {
     event.preventDefault()
+    dispatch(signupUser({ 
+      displayName,
+      email,
+      password,
+      confirmPassword
+    }))
 
-    if (password !== confirmPassword) {
-      const err = ["Password Don't match"]
-      setErrors(err)
-      return
-    }
-
-    try {
-      //console.log('email, password ==>', email, password);
-      // const user = await auth.createUserWithEmailAndPassword(email, password)
-      let user = ''
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          user = userCredential.user
-        })
-        .catch((error) => {
-          //console.log('err message ==>', error.message)
-          setErrors([error.message])
-          return
-        })
-      //console.log('display name', displayName);
-      await handleUserProfile(user, { displayName })
-      resetState()
-    } catch (error) {
-      //console.log(error);
-    }
   }
 
   return (
