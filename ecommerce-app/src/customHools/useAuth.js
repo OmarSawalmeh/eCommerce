@@ -15,7 +15,7 @@ const useAuth = (props) => {
       navigate('/login')
     }
     else{
-      navigate('/')
+      //navigate('/')
     }
   }, [currentUser])
 

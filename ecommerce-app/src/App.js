@@ -2,8 +2,12 @@ import React, {useEffect} from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { auth, handleUserProfile } from './firebase/utils'
 
+// components
+import AdminToolbar from './components/AdminToolbar'
+
 // hoc
 import WithAuth from './hoc/withAuth'
+import WithAdminAuth from './hoc/withAdminAuth'
 
 // layouts
 import MainLayout from './layout/MainLayout'
@@ -14,6 +18,7 @@ import Homepage from './pages/Homepage'
 import Registration from './pages/Registration'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Admin from './pages/Admin'
 
 // style
 import './default.scss'
@@ -47,6 +52,7 @@ const App = props => {
 
     return (
       <div className='App'>
+        <AdminToolbar />
         <Routes>
           <Route
             exact
@@ -76,11 +82,21 @@ const App = props => {
           <Route
             path='/dashboard'
             element={
-              //<WithAuth>
+              <WithAuth>
                 <MainLayout>
                   <Dashboard />
                 </MainLayout>
-              //</WithAuth>
+              </WithAuth>
+            }
+          />
+          <Route
+            path='/admin'
+            element={
+              <WithAdminAuth>
+                <MainLayout>
+                  <Admin />
+                </MainLayout>
+              </WithAdminAuth>
             }
           />
         </Routes>

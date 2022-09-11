@@ -1,5 +1,5 @@
 import { useAuth } from '../customHools'
-import { withR } from 'react-dom';
+//import { withRouter } from 'react-dom';
 
 const WithAuth = (props) => useAuth(props) && props.children
 
