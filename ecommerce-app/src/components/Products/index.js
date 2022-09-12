@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
 import { fetchProductsStart } from '../../redux/Products/products.action'
 import Product from './Product'
+import FormSelect from '../Forms/FormSelect'
 import './style.scss'
 
 const mapState = ({productsData}) => ({
@@ -10,13 +12,18 @@ const mapState = ({productsData}) => ({
 
 function ProductResults() {
    const dispatch = useDispatch();
+   const history = useNavigate();
+   const { filterType } = useParams();
    const { products } = useSelector(mapState)
 
-   useEffect(()=>{
-      dispatch(
-         fetchProductsStart()
-      )
-   }, [])
+   useEffect(() => {
+     dispatch(fetchProductsStart({ filterType }))
+   }, [filterType])
+
+   const handleFilter = (e) =>{
+      const nextFilter = e.target.value
+      history(`/search/${nextFilter}`)
+   }
 
    if(!Array.isArray(products)) return null;
 
@@ -30,9 +37,30 @@ function ProductResults() {
       )
    }
 
+   const configFilters = {
+    defaultValue: filterType,
+     options: [
+       {
+         name: 'show all',
+         value: '',
+       },
+       {
+         name: 'Mens',
+         value: 'mens',
+       },
+       {
+         name: 'Womens',
+         value: 'womens',
+       },
+     ],
+     handleChange: handleFilter,
+   }
+
    return (
      <div className='products'>
        <h1>Browse Products</h1>
+
+       <FormSelect {...configFilters}/>
 
        <div className='productResults'>
          {products.map((product, pos) => {

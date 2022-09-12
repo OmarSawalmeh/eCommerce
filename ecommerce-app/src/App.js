@@ -67,7 +67,16 @@ const App = props => {
             }
           />
           <Route
+            exact
             path='/search'
+            element={
+              <MainLayout>
+                <Search />
+              </MainLayout>
+            }
+          />
+          <Route
+            path='/search/:filterType'
             element={
               <MainLayout>
                 <Search />
