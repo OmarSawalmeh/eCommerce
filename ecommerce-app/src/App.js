@@ -17,6 +17,7 @@ import DashBoardLayout from './layout/DashboardLayout'
 
 // pages
 import Homepage from './pages/Homepage'
+import Search from './pages/Search'
 import Registration from './pages/Registration'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -63,6 +64,14 @@ const App = props => {
               <HomepageLayout>
                 <Homepage />
               </HomepageLayout>
+            }
+          />
+          <Route
+            path='/search'
+            element={
+              <MainLayout>
+                <Search />
+              </MainLayout>
             }
           />
           <Route
