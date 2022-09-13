@@ -22,6 +22,7 @@ import Registration from './pages/Registration'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Admin from './pages/Admin'
+import ProductDetails from './pages/ProductDetails'
 
 // style
 import './default.scss'
@@ -80,6 +81,14 @@ const App = props => {
             element={
               <MainLayout>
                 <Search />
+              </MainLayout>
+            }
+          />
+          <Route
+            path='/product/:productID'
+            element={
+              <MainLayout>
+                <ProductDetails />
               </MainLayout>
             }
           />

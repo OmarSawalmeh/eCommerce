@@ -1,8 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Button from '../../Forms/Button'
 
-function Product({ productThumbnail, productName, productPrice }) {
+function Product({ documentID, productThumbnail, productName, productPrice }) {
   if (
+    ! documentID ||
     !productThumbnail ||
     !productName ||
     typeof productPrice === 'undefined'
@@ -17,12 +19,18 @@ function Product({ productThumbnail, productName, productPrice }) {
   return (
     <div className='product'>
       <div className='thumb'>
-        <img src={productThumbnail} alt={productName} />
+        <Link to={`/product/${documentID}`}>
+          <img src={productThumbnail} alt={productName} />
+        </Link>
       </div>
       <div className='details'>
         <ul>
           <li>
-            <span className='name'>{productName}</span>
+            <Link to={`/product/${documentID}`}>
+              <span className='name'>
+                <strong> {productName}</strong>
+              </span>
+            </Link>
           </li>
           <li>
             <span className='price'>${productPrice}</span>

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router'
 import { fetchProductsStart } from '../../redux/Products/products.action'
 import Product from './Product'
 import FormSelect from '../Forms/FormSelect'
+import LoadMore from '../LoadMore'
 import './style.scss'
 
 const mapState = ({productsData}) => ({
@@ -56,11 +57,18 @@ function ProductResults() {
      handleChange: handleFilter,
    }
 
+   const handleLoadMore = () =>{
+
+   }
+   const configLoadMore = {
+    onLoadMoreEvt: handleLoadMore
+   }
+
    return (
      <div className='products'>
        <h1>Browse Products</h1>
 
-       <FormSelect {...configFilters}/>
+       <FormSelect {...configFilters} />
 
        <div className='productResults'>
          {products.map((product, pos) => {
@@ -74,13 +82,12 @@ function ProductResults() {
            }
 
            const configProduct = {
-             productThumbnail,
-             productName,
-             productPrice,
+              ...product
            }
            return <Product {...configProduct} />
          })}
        </div>
+       <LoadMore {...configLoadMore} />
      </div>
    )
 }
