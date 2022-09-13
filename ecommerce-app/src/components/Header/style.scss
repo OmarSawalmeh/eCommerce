@@ -66,6 +66,13 @@
       -moz-transform: translateY(-50%);
       transform: translateY(-50%);
 
+      .cart{
+        color: black;
+      }
+      .cart:hover {
+        color: #277BC0;
+      }
+
       i {
         display: none;
       }

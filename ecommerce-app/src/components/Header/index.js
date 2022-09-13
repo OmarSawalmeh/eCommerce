@@ -4,14 +4,17 @@ import './style.scss';
 import {Link} from 'react-router-dom'
 import { auth } from './../../firebase/utils'
 import logo from '../../assets/logo.png';
+import {selectCartItemsCount} from './../../redux/Cart/cart.selectors'
 
-const mapState = ({ user }) => ({
-  currentUser: user.currentUser,
+const mapState = (state) => ({
+  currentUser: state.user.currentUser,
+  totalNumCartItem: selectCartItemsCount(state),
 })
+
 
 function Header(props) {
 
-  const { currentUser } = useSelector(mapState)
+  const { currentUser, totalNumCartItem } = useSelector(mapState)
 
   return (
     <>
@@ -35,29 +38,29 @@ function Header(props) {
           </nav>
 
           <div className='callToActions'>
-            {currentUser && (
-              <ul>
+            <ul>
+              <li>
+                <Link to='/' className='cart'>
+                  <strong>Your Cart({totalNumCartItem})</strong>
+                </Link>
+              </li>
+              {currentUser && [
                 <li>
                   <Link to='/dashboard'>Dashboard</Link>
-                </li>
+                </li>,
                 <li>
                   <span onClick={() => auth.signOut()}>LogOut</span>
-                </li>
-              </ul>
-            )}
-            {!currentUser && (
-              <ul>
-                <li>
-                  <Link to='/dashboard'>Dashboard</Link>
-                </li>
+                </li>,
+              ]}
+              {!currentUser && [
                 <li>
                   <Link to='/registration'>Register</Link>
-                </li>
+                </li>,
                 <li>
                   <Link to='/login'>Login</Link>
-                </li>
-              </ul>
-            )}
+                </li>,
+              ]}
+            </ul>
           </div>
         </div>
       </header>
