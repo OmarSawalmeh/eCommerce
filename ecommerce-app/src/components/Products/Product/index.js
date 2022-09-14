@@ -2,10 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from '../../Forms/Button'
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { addProduct } from '../../../redux/Cart/cart.actions';
 
 function Product(product) {
   const dispatch = useDispatch();
+  const history = useNavigate();
   const { documentID, productThumbnail, productName, productPrice } = product;
   if (
     ! documentID ||
@@ -25,7 +27,7 @@ function Product(product) {
     dispatch(
       addProduct(product)
     )
-
+      history('/cart')
   }
 
   return (

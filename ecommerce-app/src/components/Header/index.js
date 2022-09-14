@@ -40,7 +40,7 @@ function Header(props) {
           <div className='callToActions'>
             <ul>
               <li>
-                <Link to='/' className='cart'>
+                <Link to='/cart' className='cart'>
                   <strong>Your Cart({totalNumCartItem})</strong>
                 </Link>
               </li>

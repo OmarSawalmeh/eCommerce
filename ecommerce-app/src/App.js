@@ -23,6 +23,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Admin from './pages/Admin'
 import ProductDetails from './pages/ProductDetails'
+import Cart from './pages/Cart'
 
 // style
 import './default.scss'
@@ -97,6 +98,14 @@ const App = props => {
             element={
               <MainLayout>
                 <Registration />
+              </MainLayout>
+            }
+          />
+          <Route
+            path='/cart'
+            element={
+              <MainLayout>
+                <Cart />
               </MainLayout>
             }
           />
